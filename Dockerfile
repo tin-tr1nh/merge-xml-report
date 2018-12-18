@@ -1,4 +1,4 @@
-FROM golang:latest 
+FROM golang:alpine
 ENV PROJ_DIR=$GOPATH/src/bitbucket.org/hameesys/merge-xml-report
 RUN mkdir -p ${PROJ_DIR}
 ADD . ${PROJ_DIR}
