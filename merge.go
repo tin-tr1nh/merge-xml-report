@@ -17,9 +17,7 @@ func MergePaths(inputPaths []string, outputPath string) error {
 
 		log.Println("Merge report")
 		mergedReport = mergedReport.Merge(report)
-		printReportInfo(report)
 	}
 
-	printReportInfo(mergedReport)
 	return WriteReport(mergedReport, outputPath)
 }
