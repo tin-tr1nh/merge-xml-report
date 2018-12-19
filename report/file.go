@@ -39,4 +39,54 @@ func (f *File) Merge(other File) {
 			f.Lines = append(f.Lines, line)
 		}
 	}
+
+	f.updateClassMetric()
+	f.updateFileMetric()
+}
+
+func (f *File) countClassMetric() ClassMetrics {
+	metrics := ClassMetrics{}
+	for _, line := range f.Lines {
+		if line.Type == "stmt" {
+			metrics.Statements++
+		}
+		if line.Type == "method" {
+			metrics.Methods++
+		}
+		if line.Type == "stmt" && line.Count > 0 {
+			metrics.CoveredStatements++
+		}
+
+		if line.Type == "method" && line.Count > 0 {
+			metrics.CoveredMethods++
+		}
+	}
+	metrics.Elements = metrics.Methods + metrics.Statements
+	metrics.CoveredElements = metrics.CoveredMethods + metrics.CoveredStatements
+
+	return metrics
+}
+
+func (f *File) updateClassMetric() {
+	metrics := f.countClassMetric()
+	if len(f.Classes) > 0 {
+		f.Classes[0].Metrics.Elements = metrics.Elements
+		f.Classes[0].Metrics.CoveredElements = metrics.CoveredElements
+		f.Classes[0].Metrics.Statements = metrics.Statements
+		f.Classes[0].Metrics.CoveredStatements = metrics.CoveredStatements
+		f.Classes[0].Metrics.Methods = metrics.Methods
+		f.Classes[0].Metrics.CoveredMethods = metrics.CoveredMethods
+	}
+}
+
+func (f *File) updateFileMetric() {
+	metrics := f.countClassMetric()
+	if len(f.Classes) > 0 {
+		f.Metrics.Elements = metrics.Elements
+		f.Metrics.CoveredElements = metrics.CoveredElements
+		f.Metrics.Statements = metrics.Statements
+		f.Metrics.CoveredStatements = metrics.CoveredStatements
+		f.Metrics.Methods = metrics.Methods
+		f.Metrics.CoveredMethods = metrics.CoveredMethods
+	}
 }
