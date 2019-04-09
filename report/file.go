@@ -35,7 +35,7 @@ func (f *File) Merge(other File) {
 
 	mapOfLines = f.parseMapOfLines()
 	for _, line := range other.Lines {
-		if _, ok := mapOfLines[line.Num]; !ok {
+		if _, ok := mapOfLines[line.Num]; !ok && line.Count > 0 {
 			f.Lines = append(f.Lines, line)
 		}
 	}
