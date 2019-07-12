@@ -1,8 +1,6 @@
 FROM golang:alpine
-ENV PROJ_DIR=$GOPATH/src/bitbucket.org/hameesys/merge-xml-report
-RUN mkdir -p ${PROJ_DIR}
-ADD . ${PROJ_DIR}
-WORKDIR ${PROJ_DIR}
+ADD . ${HOME}/merge-tool
+WORKDIR ${HOME}/merge-tool
 RUN go build -o main . 
 
 VOLUME /files/reports
