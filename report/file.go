@@ -15,7 +15,7 @@ type File struct {
 	Metrics FileMetrics `xml:"metrics"`
 }
 
-func (f *File) parseMapOfLines() map[int32]*Line {
+func (f *File) ParseMapOfLines() map[int32]*Line {
 	mapOfLines := map[int32]*Line{}
 	for i, line := range f.Lines {
 		mapOfLines[line.Num] = &f.Lines[i]
@@ -26,14 +26,14 @@ func (f *File) parseMapOfLines() map[int32]*Line {
 
 // Merge with other File
 func (f *File) Merge(other File) {
-	mapOfLines := other.parseMapOfLines()
+	mapOfLines := other.ParseMapOfLines()
 	for i := range f.Lines {
 		if pLine, ok := mapOfLines[f.Lines[i].Num]; ok {
 			f.Lines[i].Merge(*pLine)
 		}
 	}
 
-	mapOfLines = f.parseMapOfLines()
+	mapOfLines = f.ParseMapOfLines()
 	for _, line := range other.Lines {
 		if _, ok := mapOfLines[line.Num]; !ok && line.Count > 0 {
 			f.Lines = append(f.Lines, line)
