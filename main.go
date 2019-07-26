@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"io/ioutil"
+	"path/filepath"
 )
 
 func check(err error) {
@@ -11,8 +12,8 @@ func check(err error) {
 	}
 }
 
-// ListDir list all file in the dir
-func ListDir(dir string) ([]string, error) {
+// listXmlFiles list all file in the dir
+func listXmlFiles(dir string) ([]string, error) {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return nil, err
@@ -20,7 +21,7 @@ func ListDir(dir string) ([]string, error) {
 
 	filePaths := []string{}
 	for _, file := range files {
-		if !file.IsDir() {
+		if !file.IsDir() && filepath.Ext(file.Name()) == ".xml" {
 			filePaths = append(filePaths, dir+"/"+file.Name())
 		}
 	}
@@ -33,7 +34,7 @@ func main() {
 	var inputDirPath = flag.String("input", "/files/reports", "Input path of reports dir")
 	flag.Parse()
 
-	filePaths, err := ListDir(*inputDirPath)
+	filePaths, err := listXmlFiles(*inputDirPath)
 	check(err)
 	err = MergePaths(filePaths, *outputPath)
 	check(err)

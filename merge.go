@@ -10,7 +10,7 @@ import (
 func MergePaths(inputPaths []string, outputPath string) error {
 	var mergedReport *report.Report
 	for _, inputPath := range inputPaths {
-		report, err := ReadReport(inputPath)
+		report, err := report.ReadReport(inputPath)
 		if err != nil {
 			return err
 		}
@@ -19,5 +19,5 @@ func MergePaths(inputPaths []string, outputPath string) error {
 		mergedReport = mergedReport.Merge(report)
 	}
 
-	return WriteReport(mergedReport, outputPath)
+	return report.WriteReport(mergedReport, outputPath)
 }
