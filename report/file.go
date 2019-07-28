@@ -44,6 +44,19 @@ func (f *File) Merge(other File) {
 	f.updateFileMetric()
 }
 
+// Pull only the count of line that already existed
+func (f *File) Pull(other File) {
+	mapOfLines := other.ParseMapOfLines()
+	for i := range f.Lines {
+		if pLine, ok := mapOfLines[f.Lines[i].Num]; ok {
+			f.Lines[i].Merge(*pLine)
+		}
+	}
+
+	f.updateClassMetric()
+	f.updateFileMetric()
+}
+
 func (f *File) countClassMetric() ClassMetrics {
 	metrics := ClassMetrics{}
 	for _, line := range f.Lines {
