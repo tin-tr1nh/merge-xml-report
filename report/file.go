@@ -57,6 +57,22 @@ func (f *File) Pull(other File) {
 	f.updateFileMetric()
 }
 
+// ForcePull only fetch the count of line that already existed in other
+// and remove the line that dose not belong to other
+func (f *File) ForcePull(other File) {
+	pulledLines := make([]Line, 0)
+	mapOfLines := other.ParseMapOfLines()
+	for i := range f.Lines {
+		if pLine, ok := mapOfLines[f.Lines[i].Num]; ok {
+			pulledLines = append(pulledLines, *pLine)
+		}
+	}
+	f.Lines = pulledLines
+
+	f.updateClassMetric()
+	f.updateFileMetric()
+}
+
 func (f *File) countClassMetric() ClassMetrics {
 	metrics := ClassMetrics{}
 	for _, line := range f.Lines {
